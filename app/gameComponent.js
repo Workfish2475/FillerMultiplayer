@@ -65,6 +65,9 @@ function renderGame(gameState){
 
 //! Not doing anything >:(
 function renderGameOver(winner){
+	
+	console.log("Client side renderGameOver method reached.")
+
 	let backdrop = document.createElement('div');
     backdrop.style.position = 'fixed';
     backdrop.style.top = '0';
@@ -78,7 +81,7 @@ function renderGameOver(winner){
     backdrop.style.zIndex = '1000';
 
     let popup = document.createElement('div');
-    popup.innerHTML = `<h1>Congrats! ${winner}</h1><br><h3>Would you like to play again?</h3><br><button id="yesButton">Yes</button>&nbsp;<button id="noButton">No</button>`;
+    popup.innerHTML = `<h1>Congrats! ${winner}</h1><br><br>`;
     popup.style.padding = '20px';
     popup.style.backgroundColor = 'white';
     popup.style.borderRadius = '5px';
@@ -86,16 +89,7 @@ function renderGameOver(winner){
     popup.style.color = 'black';
 
     backdrop.appendChild(popup);
-
     document.body.appendChild(backdrop);
-
-    document.getElementById('yesButton').addEventListener('click', function() {
-        window.location.reload();
-    });
-
-    document.getElementById('noButton').addEventListener('click', function() {
-        document.body.removeChild(backdrop);
-    });
 }
 
 function sendMoveToServer(color){
@@ -111,7 +105,6 @@ socket.on('disconnect', () => {
 })
 
 socket.on('gameStateUpdate', (gameState) => {
-	// Update game UI based on the gameState object
 	console.log('Client detecting gameStateUpdate event');
 	renderGame(gameState);
 });

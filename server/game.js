@@ -4,6 +4,8 @@ const io = require('socket.io')(http, {
     cors: {origin: "*"}
 });
 
+//? Would it be better to just implement a flag indicating whether the game is over or not
+
 class game {
 	constructor(){
 		this.masterColors = ['#ffc13d', '#c77dff', '#D1383B', '#238bf3', '#4f772d', '#003049'];
@@ -98,7 +100,6 @@ class game {
 		const currentPlayerIndex = this.currentTurn ? 0 : 1;
     	const currentPlayerID = this.players[currentPlayerIndex].id;
 
-		//TODO implement a better turn checker
     	if (playerID !== currentPlayerID) {
         	console.log("Not the player's turn");
         	return;
@@ -107,21 +108,19 @@ class game {
 		this.colorChosen(currentPlayerIndex, color);
 		this.adjustBoard(color);
 		this.currentTurn = !this.currentTurn;
-		this.broadcastGameState();
-
 		this.checkGameOver();
+		this.broadcastGameState();
 	}
 	
-
-	//TODO this needs to be implemented to check for gameOver conditions
 	checkGameOver(){
+
+		console.log('Server got to checkGameOver method');
 
 		const boardWidth = 6;
 		const boardHeight = 4;
 
-		//! Could be a flaw in this logic and reloading the page.
+		//TODO Need to check these conditions
 		if (this.player1Captured.size + this.player2Captured.size == boardWidth * boardHeight){
-
 			if (this.player1Captured.size > this.player2Captured.size){
 				io.emit('gameOver', "Player 1");
 			} else if (this.player2Captured.size > this.player1Captured.size){
