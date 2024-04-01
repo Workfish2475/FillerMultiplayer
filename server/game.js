@@ -12,11 +12,12 @@ class game {
 		this.availableColors = [...this.masterColors];
 		this.players = [];
 		this.playerColors = [];
+		this.player1Captured = [];
+		this.player2Captured = [];
 		this.tileBoard = this.initTileBoard();
 		this.mainBoard = this.initBoard();
 		this.currentTurn = true;
-		this.player1Captured = new Set();
-		this.player2Captured = new Set();
+
 	}
 
 	initBoard(){
@@ -54,7 +55,8 @@ class game {
 	
 		tileBoard[0][5] = player1StartColor; 
 		tileBoard[3][0] = player2StartColor; 
-		
+
+
 		this.availableColors = this.availableColors.filter(c => c !== player1StartColor && c !== player2StartColor);
 	
 		return tileBoard;
@@ -88,10 +90,12 @@ class game {
 		const playerNumber = this.players.length;
 		console.log(`Player ${playerNumber} (ID: ${playerID}) has joined`);
 	
-		if (playerNumber === 0) {
+		if (playerNumber === 1) {
 			this.playerColors.push(this.tileBoard[0][5]);
-		} else if (playerNumber === 1) {
+			this.player1Captured.push(this.tileBoard[0][5]);
+		} else if (playerNumber === 2) {
 			this.playerColors.push(this.tileBoard[3][0]);
+			this.player2Captured.push(this.tileBoard[3][0]);
 		}
 	}
 	
@@ -118,14 +122,18 @@ class game {
 
 		const boardWidth = 6;
 		const boardHeight = 4;
-
+		console.log(this.player1Captured.length);
+		console.log(this.player2Captured.length);
 		//TODO Need to check these conditions
-		if (this.player1Captured.size + this.player2Captured.size == boardWidth * boardHeight){
-			if (this.player1Captured.size > this.player2Captured.size){
+		if (this.player1Captured.length + this.player2Captured.length == boardWidth * boardHeight){
+			if (this.player1Captured.length > this.player2Captured.length){
+				console.log('Player 1 won');
 				io.emit('gameOver', "Player 1");
-			} else if (this.player2Captured.size > this.player1Captured.size){
+			} else if (this.player2Captured.length > this.player1Captured.length){
+				console.log('Player 2 won');
 				io.emit('gameOver', "Player 2");
-			} else if (this.player1Captured.size === this.player2Captured.size){
+			} else if (this.player1Captured.length === this.player2Captured.length){
+				console.log('It was a draw');
 				io.emit('gameOver', "It's a draw!");
 			}
 		}
@@ -144,8 +152,8 @@ class game {
 			mainBoard: this.mainBoard,
 			currnetTurn: this.currentTurn,
 			availableColors: this.availableColors,
-			player1Captured: Array.from(this.player1Captured),
-			player2Captured: Array.from(this.player2Captured)
+			player1Captured: this.player1Captured,
+			player2Captured: this.player2Captured
 		};
 	}
 
@@ -167,24 +175,24 @@ class game {
 					//check up
 					if(i-1 >= 0 && colorTarget === this.tileBoard[i-1][j] && this.mainBoard[i-1][j] === "x") {
 						this.mainBoard[i-1][j] ='1';
-						this.player1Captured.add(this.tileBoard[i-1][j]);
+						this.player1Captured.push(this.tileBoard[i-1][j]);
 					}
 					//check down
 					if(i+1 <this.tileBoard.length  && colorTarget === this.tileBoard[i+1][j] && this.mainBoard[i+1][j] === "x") {
 						this.mainBoard[i+1][j] ='1';
-						this.player1Captured.add(this.tileBoard[i+1][j]);
+						this.player1Captured.push(this.tileBoard[i+1][j]);
 	
 					}
 					//check left
 					if(j-1 >= 0 && colorTarget === this.tileBoard[i][j-1] && this.mainBoard[i][j-1] === "x") {
 						this.mainBoard[i][j-1] ='1';
-						this.player1Captured.add(this.tileBoard[i][j-1]);
+						this.player1Captured.push(this.tileBoard[i][j-1]);
 	
 					}
 					//check right
 					if(j+1 < this.tileBoard[i].length && colorTarget === this.tileBoard[i][j+1] && this.mainBoard[i][j+1] === "x") {
 						this.mainBoard[i][j+1] ='1';
-						this.player1Captured.add(this.tileBoard[i][j+1]);
+						this.player1Captured.push(this.tileBoard[i][j+1]);
 	
 					}
 				}
@@ -193,25 +201,25 @@ class game {
 					//check up
 					if(i-1 >= 0 && colorTarget === this.tileBoard[i-1][j] && this.mainBoard[i-1][j] === "x") {
 						this.mainBoard[i-1][j] ='2';
-						this.player2Captured.add(this.tileBoard[i-1][j]);
+						this.player2Captured.push(this.tileBoard[i-1][j]);
 	
 					}
 					//check down
 					if(i+1 <this.tileBoard.length  && colorTarget === this.tileBoard[i+1][j] && this.mainBoard[i+1][j] === "x") {
 						this.mainBoard[i+1][j] ='2';
-						this.player2Captured.add(this.tileBoard[i+1][j]);
+						this.player2Captured.push(this.tileBoard[i+1][j]);
 	
 					}
 					//check left
 					if(j-1 >= 0 && colorTarget === this.tileBoard[i][j-1] && this.mainBoard[i][j-1] === "x") {
 						this.mainBoard[i][j-1] ='2';
-						this.player2Captured.add(this.tileBoard[i][j-1]);
+						this.player2Captured.push(this.tileBoard[i][j-1]);
 	
 					}
 					//check right
 					if(j+1 < this.tileBoard[i].length && colorTarget === this.tileBoard[i][j+1] && this.mainBoard[i][j+1] === "x") {
 						this.mainBoard[i][j+1] ='2';
-						this.player2Captured.add(this.tileBoard[i][j+1]);
+						this.player2Captured.push(this.tileBoard[i][j+1]);
 	
 					}
 				}
