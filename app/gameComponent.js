@@ -51,12 +51,19 @@ function renderGame(gameState){
 		});
 	});
 
+	//! Not a function error here
+	/*
 	gameState.players.forEach(player => {
 		const gamePlayers = document.createElement('div');
 		gamePlayers.className = 'player-names';
 		gamePlayers.textContent = `${player}`;
 		playerArea.appendChild(gamePlayers);
 	});
+	*/
+
+	for (const player in gameState.players){
+		console.log(player);
+	}
 }
 
 function sendMoveToServer(color){

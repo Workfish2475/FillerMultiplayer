@@ -8,7 +8,7 @@ class game {
 	constructor(){
 		this.masterColors = ['#ffc13d', '#c77dff', '#D1383B', '#238bf3', '#4f772d', '#003049'];
 		this.availableColors = [...this.masterColors];
-		this.players = {};
+		this.players = [];
 		this.playerColors = [];
 		this.tileBoard = this.initTileBoard();
 		this.mainBoard = this.initBoard();
@@ -92,7 +92,7 @@ class game {
 		}
 	}
 	
-
+	//! Check that we're properly updating the colorArr with a value.
 	handleMove(playerID, color) {
 
 		const currentPlayerIndex = this.currentTurn ? 0 : 1;
@@ -103,8 +103,9 @@ class game {
         	return;
     	}
 
-		this.adjustBoard(color);
+		//? Does placement matter?
 		this.colorChosen(currentPlayerIndex, color);
+		this.adjustBoard(color);
 		this.currentTurn = !this.currentTurn;
 		this.broadcastGameState();
 	}
@@ -133,6 +134,7 @@ class game {
 	}
 
 	colorChosen(currentPlayerIndex, color){
+		//? Is this a valid way to update JS Arr?
 		this.playerColors[currentPlayerIndex] = color;
 		this.availableColors = this.masterColors.filter(c => !Object.values(this.playerColors).includes(c));
 	}
