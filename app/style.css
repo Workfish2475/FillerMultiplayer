@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=Madimi+One&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Madimi+One&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+html {
+    /*font-family: "Madimi One", sans-serif;*/
+    font-family: "Nunito", sans-serif;
+    min-width: 690px;
+    color: white;
+    background-color: #e1e1e1;
+}
+
+.titleCard {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    color: black;
+    background-color: #ffffff;
+    box-shadow: 0 2px 15px  rgba(0,0,0,0.1);
+    border-radius: 5px;
+}
+
+.titleCard h2 {
+    font-size: xx-large;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+.multiplayer {
+    padding-top: 15px;
+    display: grid;
+    grid-auto-flow: column;
+    text-align: center;
+    color: black;
+}
+
+.multiplayer h3 {
+    padding: 10px;
+}
+
+.game-area {
+    /*border: 1px solid red;*/
+    display: grid;
+    grid-template-columns: repeat(6,1fr);
+    padding: 10px;
+    background-color: white;
+    box-shadow: 0 2px 15px  rgba(0,0,0,0.1);
+    border-radius: 5px;
+}
+
+.player-names {
+    /*border: 1px solid red;*/
+    background-color: #ffffff;
+    box-shadow: 0 2px 15px  rgba(0,0,0,0.1);
+    border-radius: 5px;
+    display: grid;
+    grid-auto-flow: column;
+    text-align: center;
+    gap: 10px;
+    padding: 15px;
+    font-size: larger;
+}
+
+.color-grid {
+    /*border: 1px solid red;*/
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+    padding: 10px;
+}
+
+.colorTiles {
+    background-color: #f0f0f0;
+    text-align: center;
+    padding: 15px;
+}
+
+.tile {
+    background-color: #f0f0f0;
+    text-align: center;
+    padding: 40px;
+}  /* End of index.html style */
+
+
+
+
