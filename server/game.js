@@ -74,6 +74,7 @@ class game {
 		return validColors[Math.floor(Math.random() * validColors.length)];
 	}
 
+	//? Maybe we should assign a default value to the playerColors arr.
 	addPlayer(playerID){
 		if (this.players.length < 2) {
 			this.players.push({
@@ -92,27 +93,43 @@ class game {
 		}
 	}
 	
-	//! Check that we're properly updating the colorArr with a value.
 	handleMove(playerID, color) {
 
 		const currentPlayerIndex = this.currentTurn ? 0 : 1;
     	const currentPlayerID = this.players[currentPlayerIndex].id;
 
+		//TODO implement a better turn checker
     	if (playerID !== currentPlayerID) {
         	console.log("Not the player's turn");
         	return;
     	}
 
-		//? Does placement matter?
 		this.colorChosen(currentPlayerIndex, color);
 		this.adjustBoard(color);
 		this.currentTurn = !this.currentTurn;
 		this.broadcastGameState();
+
+		this.checkGameOver();
 	}
 	
 
+	//TODO this needs to be implemented to check for gameOver conditions
 	checkGameOver(){
-		io.emit('gameOver', playerID);
+
+		const boardWidth = 6;
+		const boardHeight = 4;
+
+		//! Could be a flaw in this logic and reloading the page.
+		if (this.player1Captured.size + this.player2Captured.size == boardWidth * boardHeight){
+
+			if (this.player1Captured.size > this.player2Captured.size){
+				io.emit('gameOver', "Player 1");
+			} else if (this.player2Captured.size > this.player1Captured.size){
+				io.emit('gameOver', "Player 2");
+			} else if (this.player1Captured.size === this.player2Captured.size){
+				io.emit('gameOver', "It's a draw!");
+			}
+		}
 	}
 
 	broadcastGameState(){
@@ -134,7 +151,6 @@ class game {
 	}
 
 	colorChosen(currentPlayerIndex, color){
-		//? Is this a valid way to update JS Arr?
 		this.playerColors[currentPlayerIndex] = color;
 		this.availableColors = this.masterColors.filter(c => !Object.values(this.playerColors).includes(c));
 	}

@@ -36,7 +36,7 @@ function renderGame(gameState){
 			const cellElement = document.createElement('div');
 			cellElement.className = 'tile';
 	
-			//! Color assingment for captured tiles is null. WHY?!?!?
+			//! Tile at position (0,3) is not being set correctly.
 			const mainBoardValue = gameState.mainBoard[rowIndex][cellIndex];
 			if (mainBoardValue === '1') {
 				cellElement.style.backgroundColor = gameState.playerColors[0]; 
@@ -51,19 +51,51 @@ function renderGame(gameState){
 		});
 	});
 
-	//! Not a function error here
-	/*
-	gameState.players.forEach(player => {
+	let counter = 1;
+
+	//TODO implment a mechanism that assigns the players color to the player name tile.
+	for (const player in gameState.players){
 		const gamePlayers = document.createElement('div');
 		gamePlayers.className = 'player-names';
-		gamePlayers.textContent = `${player}`;
+		gamePlayers.textContent = `Player ${counter++}`;
+		gamePlayers.style.color = 'black'
 		playerArea.appendChild(gamePlayers);
-	});
-	*/
-
-	for (const player in gameState.players){
-		console.log(player);
 	}
+}
+
+//! Not doing anything >:(
+function renderGameOver(winner){
+	let backdrop = document.createElement('div');
+    backdrop.style.position = 'fixed';
+    backdrop.style.top = '0';
+    backdrop.style.left = '0';
+    backdrop.style.width = '100%';
+    backdrop.style.height = '100%';
+    backdrop.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+    backdrop.style.display = 'flex';
+    backdrop.style.justifyContent = 'center';
+    backdrop.style.alignItems = 'center';
+    backdrop.style.zIndex = '1000';
+
+    let popup = document.createElement('div');
+    popup.innerHTML = `<h1>Congrats! ${winner}</h1><br><h3>Would you like to play again?</h3><br><button id="yesButton">Yes</button>&nbsp;<button id="noButton">No</button>`;
+    popup.style.padding = '20px';
+    popup.style.backgroundColor = 'white';
+    popup.style.borderRadius = '5px';
+    popup.style.textAlign = 'center';
+    popup.style.color = 'black';
+
+    backdrop.appendChild(popup);
+
+    document.body.appendChild(backdrop);
+
+    document.getElementById('yesButton').addEventListener('click', function() {
+        window.location.reload();
+    });
+
+    document.getElementById('noButton').addEventListener('click', function() {
+        document.body.removeChild(backdrop);
+    });
 }
 
 function sendMoveToServer(color){
@@ -85,5 +117,6 @@ socket.on('gameStateUpdate', (gameState) => {
 });
 
 socket.on('gameOver', (winner) => {
-	//Kill me now.
+	console.log('Client detecting gameOver event');
+	renderGameOver(winner);
 });
